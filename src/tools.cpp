@@ -32,6 +32,7 @@
 #include <tf/LinearMath/Quaternion.h>
 #include <tf/LinearMath/Matrix3x3.h>
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <assert.h>
 

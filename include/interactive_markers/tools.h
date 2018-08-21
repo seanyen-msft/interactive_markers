@@ -32,6 +32,8 @@
 
 #include <visualization_msgs/InteractiveMarker.h>
 
+#include "exports.h"
+
 namespace interactive_markers
 {
 
@@ -65,26 +67,26 @@ geometry_msgs::Quaternion makeQuaternion( float x, float y, float z );
 /// @param msg      the interactive marker that this will go into
 /// @param control  the control where to insert the arrow marker
 /// @param pos      how far from the center should the arrow be, and on which side
-void makeArrow( const visualization_msgs::InteractiveMarker &msg,
+INT_MARK_DECL void makeArrow( const visualization_msgs::InteractiveMarker &msg,
     visualization_msgs::InteractiveMarkerControl &control, float pos );
 
 /// @brief make a default-style disc marker (e.g for rotating) based on the properties of the given interactive marker
 /// @param msg      the interactive marker that this will go into
 /// @param width    width of the disc, relative to its inner radius
-void makeDisc( const visualization_msgs::InteractiveMarker &msg,
+INT_MARK_DECL void makeDisc( const visualization_msgs::InteractiveMarker &msg,
     visualization_msgs::InteractiveMarkerControl &control, float width = 0.3 );
 
 /// @brief make a box which shows the given text and is view facing
 /// @param msg      the interactive marker that this will go into
 /// @param text     the text to display
-void makeViewFacingButton( const visualization_msgs::InteractiveMarker &msg,
+INT_MARK_DECL void makeViewFacingButton( const visualization_msgs::InteractiveMarker &msg,
     visualization_msgs::InteractiveMarkerControl &control, std::string text );
 
 /// assign an RGB value to the given marker based on the given orientation
-void assignDefaultColor(visualization_msgs::Marker &marker, const geometry_msgs::Quaternion &quat );
+INT_MARK_DECL void assignDefaultColor(visualization_msgs::Marker &marker, const geometry_msgs::Quaternion &quat );
 
 /// create a control which shows the description of the interactive marker
-visualization_msgs::InteractiveMarkerControl makeTitle( const visualization_msgs::InteractiveMarker &msg );
+INT_MARK_DECL visualization_msgs::InteractiveMarkerControl makeTitle( const visualization_msgs::InteractiveMarker &msg );
 
 }
 

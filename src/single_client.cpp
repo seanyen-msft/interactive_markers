@@ -55,7 +55,7 @@ SingleClient::SingleClient(
 , server_id_(server_id)
 , warn_keepalive_(false)
 {
-  callbacks_.statusCb( InteractiveMarkerClient::OK, server_id_, "Waiting for init message." );
+  callbacks_.statusCb( InteractiveMarkerClient::STOK, server_id_, "Waiting for init message." );
 }
 
 SingleClient::~SingleClient()
@@ -76,7 +76,7 @@ void SingleClient::process(const visualization_msgs::InteractiveMarkerInit::Cons
       init_queue_.pop_back();
     }
     init_queue_.push_front( InitMessageContext(tf_, target_frame_, msg, enable_autocomplete_transparency ) );
-    callbacks_.statusCb( InteractiveMarkerClient::OK, server_id_, "Init message received." );
+    callbacks_.statusCb( InteractiveMarkerClient::STOK, server_id_, "Init message received." );
     break;
 
   case RECEIVING:
@@ -163,7 +163,7 @@ void SingleClient::update()
   case TF_ERROR:
     if ( state_.getDuration().toSec() > 1.0 )
     {
-      callbacks_.statusCb( InteractiveMarkerClient::ERROR, server_id_, "1 second has passed. Re-initializing." );
+      callbacks_.statusCb( InteractiveMarkerClient::STERROR, server_id_, "1 second has passed. Re-initializing." );
       state_ = INIT;
     }
     break;
@@ -177,13 +177,13 @@ void SingleClient::checkKeepAlive()
   {
     std::ostringstream s;
     s << "No update received for " << round(time_since_upd) << " seconds.";
-    callbacks_.statusCb( InteractiveMarkerClient::WARN, server_id_, s.str() );
+    callbacks_.statusCb( InteractiveMarkerClient::STWARN, server_id_, s.str() );
     warn_keepalive_ = true;
   }
   else if ( warn_keepalive_ )
   {
     warn_keepalive_ = false;
-    callbacks_.statusCb( InteractiveMarkerClient::OK, server_id_, "OK" );
+    callbacks_.statusCb( InteractiveMarkerClient::STOK, server_id_, "OK" );
   }
 }
 
@@ -196,7 +196,7 @@ void SingleClient::checkInitFinished()
 
   if (last_update_seq_num_ == (uint64_t)-1)
   {
-    callbacks_.statusCb( InteractiveMarkerClient::OK, server_id_, "Initialization: Waiting for first update/keep-alive message." );
+    callbacks_.statusCb( InteractiveMarkerClient::STOK, server_id_, "Initialization: Waiting for first update/keep-alive message." );
     return;
   }
 
@@ -208,7 +208,7 @@ void SingleClient::checkInitFinished()
 
     if ( !init_it->isReady() )
     {
-      callbacks_.statusCb( InteractiveMarkerClient::OK, server_id_, "Initialization: Waiting for tf info." );
+      callbacks_.statusCb( InteractiveMarkerClient::STOK, server_id_, "Initialization: Waiting for tf info." );
     }
     else if ( next_up_exists )
     {
@@ -220,7 +220,7 @@ void SingleClient::checkInitFinished()
       }
 
       callbacks_.initCb( init_it->msg );
-      callbacks_.statusCb( InteractiveMarkerClient::OK, server_id_, "Receiving updates." );
+      callbacks_.statusCb( InteractiveMarkerClient::STOK, server_id_, "Receiving updates." );
 
       init_queue_.clear();
       state_ = RECEIVING;
@@ -246,7 +246,7 @@ void SingleClient::transformInitMsgs()
       // in case it is the only one we will receive.
       std::ostringstream s;
       s << "Cannot get tf info for init message with sequence number " << it->msg->seq_num << ". Error: " << e.what();
-      callbacks_.statusCb( InteractiveMarkerClient::WARN, server_id_, s.str() );
+      callbacks_.statusCb( InteractiveMarkerClient::STWARN, server_id_, s.str() );
     }
     ++it;
   }
@@ -287,7 +287,7 @@ void SingleClient::errorReset( std::string error_msg )
   last_update_seq_num_ = -1;
   warn_keepalive_ = false;
 
-  callbacks_.statusCb( InteractiveMarkerClient::ERROR, server_id_, error_msg );
+  callbacks_.statusCb( InteractiveMarkerClient::STERROR, server_id_, error_msg );
   callbacks_.resetCb( server_id_ );
 }
 
@@ -295,7 +295,7 @@ void SingleClient::pushUpdates()
 {
   if( !update_queue_.empty() && update_queue_.back().isReady() )
   {
-    callbacks_.statusCb( InteractiveMarkerClient::OK, server_id_, "OK" );
+    callbacks_.statusCb( InteractiveMarkerClient::STOK, server_id_, "OK" );
   }
   while( !update_queue_.empty() && update_queue_.back().isReady() )
   {

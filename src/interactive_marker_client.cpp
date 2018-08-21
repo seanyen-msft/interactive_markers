@@ -141,11 +141,11 @@ void InteractiveMarkerClient::subscribeUpdate()
     }
     catch( ros::Exception& e )
     {
-      callbacks_.statusCb( ERROR, "General", "Error subscribing: " + std::string(e.what()) );
+      callbacks_.statusCb( InteractiveMarkerClient::STERROR, "General", "Error subscribing: " + std::string(e.what()) );
       return;
     }
   }
-  callbacks_.statusCb( OK, "General", "Waiting for messages.");
+  callbacks_.statusCb( InteractiveMarkerClient::STOK, "General", "Waiting for messages.");
 }
 
 void InteractiveMarkerClient::subscribeInit()
@@ -160,7 +160,7 @@ void InteractiveMarkerClient::subscribeInit()
     }
     catch( ros::Exception& e )
     {
-      callbacks_.statusCb( ERROR, "General", "Error subscribing: " + std::string(e.what()) );
+      callbacks_.statusCb( InteractiveMarkerClient::STERROR, "General", "Error subscribing: " + std::string(e.what()) );
     }
   }
 }
@@ -168,12 +168,12 @@ void InteractiveMarkerClient::subscribeInit()
 template<class MsgConstPtrT>
 void InteractiveMarkerClient::process( const MsgConstPtrT& msg )
 {
-  callbacks_.statusCb( OK, "General", "Receiving messages.");
+  callbacks_.statusCb( InteractiveMarkerClient::STOK, "General", "Receiving messages.");
 
   // get caller ID of the sending entity
   if ( msg->server_id.empty() )
   {
-    callbacks_.statusCb( ERROR, "General", "Received message with empty server_id!");
+    callbacks_.statusCb( InteractiveMarkerClient::STERROR, "General", "Received message with empty server_id!");
     return;
   }
 
@@ -228,7 +228,7 @@ void InteractiveMarkerClient::update()
     // check if one publisher has gone offline
     if ( update_sub_.getNumPublishers() < last_num_publishers_ )
     {
-      callbacks_.statusCb( ERROR, "General", "Server is offline. Resetting." );
+      callbacks_.statusCb( InteractiveMarkerClient::STERROR, "General", "Server is offline. Resetting." );
       shutdown();
       subscribeUpdate();
       subscribeInit();
@@ -274,13 +274,13 @@ void InteractiveMarkerClient::statusCb( StatusT status, const std::string& serve
 {
   switch ( status )
   {
-  case OK:
+  case InteractiveMarkerClient::STOK:
     DBG_MSG( "%s: %s (Status: OK)", server_id.c_str(), msg.c_str() );
     break;
-  case WARN:
+  case InteractiveMarkerClient::STWARN:
     DBG_MSG( "%s: %s (Status: WARNING)", server_id.c_str(), msg.c_str() );
     break;
-  case ERROR:
+  case InteractiveMarkerClient::STERROR:
     DBG_MSG( "%s: %s (Status: ERROR)", server_id.c_str(), msg.c_str() );
     break;
   }

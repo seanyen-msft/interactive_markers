@@ -45,7 +45,7 @@ namespace interactive_markers
 
 // Simple non-intrusive helper class which creates a menu and maps its
 // entries to function callbacks
-class INT_MARK_DECL MenuHandler
+class INTERACTIVE_MARKERS_DECL MenuHandler
 {
 public:
 

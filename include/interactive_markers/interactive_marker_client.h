@@ -66,14 +66,14 @@ class SingleClient;
 /// All timestamped messages are being transformed into the target frame,
 /// while for non-timestamped messages it is ensured that the necessary
 /// tf transformation will be available.
-class INT_MARK_DECL InteractiveMarkerClient : boost::noncopyable
+class INTERACTIVE_MARKERS_DECL InteractiveMarkerClient : boost::noncopyable
 {
 public:
 
   enum StatusT {
-    STOK = 0,
-    STWARN = 1,
-    STERROR = 2
+    OK = 0,
+    WARN = 1,
+    ERROR = 2
   };
 
   typedef visualization_msgs::InteractiveMarkerUpdateConstPtr UpdateConstPtr;

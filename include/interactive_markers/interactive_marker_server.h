@@ -55,7 +55,7 @@ namespace interactive_markers
 ///
 /// Note: Keep in mind that changes made by calling insert(), erase(), setCallback() etc.
 ///       are not applied until calling applyChanges().
-class INT_MARK_DECL InteractiveMarkerServer : boost::noncopyable
+class INTERACTIVE_MARKERS_DECL InteractiveMarkerServer : boost::noncopyable
 {
 public:
 

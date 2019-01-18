@@ -7,12 +7,12 @@
 
 #ifdef ROS_BUILD_SHARED_LIBS // ros is being built around shared libraries
   #ifdef interactive_markers_EXPORTS // we are building a shared lib/dll
-    #define INT_MARK_DECL ROS_HELPER_EXPORT
+    #define INTERACTIVE_MARKERS_DECL ROS_HELPER_EXPORT
   #else // we are using shared lib/dll
-    #define INT_MARK_DECL ROS_HELPER_IMPORT
+    #define INTERACTIVE_MARKERS_DECL ROS_HELPER_IMPORT
   #endif
 #else // ros is being built around static libraries
-  #define INT_MARK_DECL
+  #define INTERACTIVE_MARKERS_DECL
 #endif
 
 #endif // INT_MARK_EXPORTDECL_H
